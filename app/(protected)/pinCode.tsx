@@ -5,7 +5,8 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
-  Image
+  Image,
+  StatusBar
 } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -105,6 +106,7 @@ const renderCell = useCallback(
 
   return (
       <LinearGradient colors={['#ffffff', '#ffffff']} style={styles.gradient}>
+        <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
         <View style={[styles.header, { paddingTop: insets.top + 16 }]}>
           <Image source={require('../../assets/images/logo_wave.jpg')} style={{ width: 150, height: 150 }} />
         </View>
