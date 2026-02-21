@@ -1,24 +1,26 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
+import { Stack, Redirect } from 'expo-router';
+import { useEffect, useState } from 'react';
+import * as SecureStore from 'expo-secure-store';
 
-import { useColorScheme } from '@/hooks/use-color-scheme';
+export default function ProtectedLayout() {
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-export const unstable_settings = {
-  anchor: '(tabs)',
-};
+  useEffect(() => {
+    const checkAuth = async () => {
+      const pin = await SecureStore.getItemAsync('userPin');
+      setIsAuthenticated(!!pin);
+      setLoading(false);
+    };
 
-export default function RootLayout() {
-  const colorScheme = useColorScheme();
+    checkAuth();
+  }, []);
 
-  return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  );
+  if (loading) return null;
+
+  if (!isAuthenticated) {
+    return <Redirect href="/" />;
+  }
+
+  return <Stack screenOptions={{ headerShown: false }} />;
 }
