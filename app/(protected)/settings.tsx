@@ -17,7 +17,8 @@ export default function Settings() {
 
   const handleLogout = async () => {
     await SecureStore.deleteItemAsync('userPin');
-    router.replace('/');
+     router.dismissAll()
+    router.replace('/(protected)/pinCode');
   };
 
   const SettingItem = ({
